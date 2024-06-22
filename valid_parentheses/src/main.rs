@@ -1,8 +1,3 @@
-fn main() {}
-
-const OPEN_BRACKETS: [char; 3] = ['(', '[', '{'];
-const CLOSE_BRACKETS: [char; 3] = [')', ']', '}'];
-
 pub struct Solution;
 
 impl Solution {
@@ -10,26 +5,16 @@ impl Solution {
         let mut stack: Vec<char> = Vec::new();
 
         for char in s.chars() {
-            if OPEN_BRACKETS.contains(&char) {
-                stack.push(char);
-            } else if let Some(&last_bracket) = stack.last() {
-                let open_index = Self::index(OPEN_BRACKETS.to_vec(), last_bracket);
-                let close_index = Self::index(CLOSE_BRACKETS.to_vec(), char);
-                if open_index == close_index {
-                    stack.pop();
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
+            match char {
+                '(' => stack.push(')'),
+                '[' => stack.push(']'),
+                '{' => stack.push('}'),
+                _ if Some(char) != stack.pop() => return false,
+                _ => (),
             }
         }
 
         stack.is_empty()
-    }
-
-    fn index(array: Vec<char>, value: char) -> usize {
-        array.iter().position(|&x| x == value).unwrap()
     }
 }
 
